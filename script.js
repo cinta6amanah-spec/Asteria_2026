@@ -1,7 +1,10 @@
 
 const API_URL = "https://script.google.com/macros/s/AKfycbzIPKhx6VOdqrZ7TCO6pe7TJIQSYeuGpywBlcWe-NvsXYkatsmQOLDz3MF5G2c0vX1DGw/exec";
 
-// Mengambil elemen HTML
+// =====================================
+// 1. MENGAMBIL ELEMEN HTML
+// =====================================
+
 const form = document.querySelector(".search-form");
 const nameInput = document.getElementById("participantName");
 const message = document.getElementById("searchMessage");
@@ -10,7 +13,10 @@ const resultCard = document.getElementById("resultCard");
 const heroButton = document.querySelector(".hero button");
 const hasilSection = document.querySelector("#hasil");
 
-// Tombol utama menuju bagian hasil
+// =====================================
+// 2. TOMBOL MENUJU HASIL
+// =====================================
+
 if (heroButton && hasilSection) {
   heroButton.addEventListener("click", function() {
     hasilSection.scrollIntoView({
@@ -20,20 +26,28 @@ if (heroButton && hasilSection) {
   });
 }
 
-// Mencegah teks dari database dianggap sebagai HTML
+// =====================================
+// 3. MENGAMANKAN TEKS HTML
+// =====================================
+
 function escapeHTML(text) {
   return String(text).replace(/[&<>"']/g, function(char) {
-    return {
+    const entities = {
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
       '"': "&quot;",
       "'": "&#039;"
-    }[char];
+    };
+
+    return entities[char];
   });
 }
 
-// Mengambil data dari Google Sheets melalui JSONP
+// =====================================
+// 4. MENGAMBIL DATA DARI GOOGLE SHEETS
+// =====================================
+
 function cariDatabase(nama) {
   return new Promise(function(resolve, reject) {
     const callbackName =
@@ -46,30 +60,46 @@ function cariDatabase(nama) {
 
     let selesai = false;
 
-    const timeout = setTimeout(function() {
-      bersihkan();
-      reject(new Error("Waktu koneksi habis."));
-    }, 15000);
-
     function bersihkan() {
       if (selesai) return;
 
       selesai = true;
       clearTimeout(timeout);
+
       script.remove();
       delete window[callbackName];
     }
 
+    const timeout = setTimeout(function() {
+      bersihkan();
+
+      reject(
+        new Error(
+          "Waktu koneksi habis. Server tidak mengirim respons."
+        )
+      );
+    }, 20000);
+
+    // Callback menerima respons dari Apps Script
     window[callbackName] = function(data) {
+      console.log("ASTERIA CALLBACK BERHASIL:", data);
+
       bersihkan();
       resolve(data);
     };
 
+    // Jika file respons gagal dimuat
     script.onerror = function() {
       bersihkan();
-      reject(new Error("Koneksi gagal."));
+
+      reject(
+        new Error(
+          "Script Google gagal dimuat oleh browser."
+        )
+      );
     };
 
+    // Membuat URL permintaan
     script.src =
       API_URL +
       "?nama=" + encodeURIComponent(nama) +
@@ -77,38 +107,61 @@ function cariDatabase(nama) {
       "&_=" + Date.now();
 
     script.async = true;
+
     document.body.appendChild(script);
   });
 }
 
-// Menampilkan hasil seleksi
-function tampilkanHasil(data) {
-  const status = String(data.status).trim().toUpperCase();
+// =====================================
+// 5. MENAMPILKAN HASIL SELEKSI
+// =====================================
 
-  let jenis = "";
-  let judul = "";
-  let deskripsi = "";
+function tampilkanHasil(data) {
+  console.log("DATA DITERIMA:", data);
+
+  if (!data || !data.success) {
+    message.textContent =
+      "Data peserta tidak ditemukan.";
+
+    return;
+  }
+
+  const status = String(data.status || "")
+    .trim()
+    .toUpperCase();
+
+  let jenis;
+  let judul;
+  let deskripsi;
 
   if (status === "LULUS") {
     jenis = "result-lulus";
     judul = "SELAMAT!";
+
     deskripsi =
       "Kamu dinyatakan LULUS seleksi calon anggota MPK.";
+
   } else if (status === "TIDAK LULUS") {
     jenis = "result-tidak-lulus";
     judul = "TERIMA KASIH!";
+
     deskripsi =
       "Kamu belum dinyatakan lulus seleksi MPK. Terima kasih atas usaha, waktu, dan partisipasimu dalam proses seleksi ASTERIA 2026.";
+
   } else {
     message.textContent =
-      "Status peserta belum valid. Silakan hubungi panitia.";
+      "Status peserta belum valid. Hubungi panitia.";
+
     return;
   }
 
+  // Rekomendasi OSIS
   let rekomendasi = "";
 
   if (
-    String(data.rekomendasi).trim().toUpperCase() === "YA"
+    String(data.rekomendasi || "")
+      .trim()
+      .toUpperCase() === "YA"
   ) {
     rekomendasi = `
       <div class="recommendation">
@@ -122,10 +175,17 @@ function tampilkanHasil(data) {
     `;
   }
 
+  // Membuat kartu hasil
   resultCard.innerHTML = `
     <div class="result-content ${jenis}">
-      <p class="result-label">HASIL SELEKSI RESMI</p>
-      <p class="result-label">ASTERIA 2026</p>
+
+      <p class="result-label">
+        HASIL SELEKSI RESMI
+      </p>
+
+      <p class="result-label">
+        ASTERIA 2026
+      </p>
 
       <h2>${judul}</h2>
 
@@ -144,8 +204,11 @@ function tampilkanHasil(data) {
       <p class="result-footer">
         MPK SMAN 1 LEMBANG
       </p>
+
     </div>
   `;
+
+  message.textContent = "";
 
   resultCard.scrollIntoView({
     behavior: "smooth",
@@ -153,7 +216,10 @@ function tampilkanHasil(data) {
   });
 }
 
-// Proses pencarian ketika formulir dikirim
+// =====================================
+// 6. PROSES PENCARIAN PESERTA
+// =====================================
+
 if (form) {
   form.addEventListener("submit", async function(event) {
     event.preventDefault();
@@ -167,28 +233,23 @@ if (form) {
       message.textContent =
         "Masukkan nama lengkap terlebih dahulu.";
 
-      message.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-
       return;
     }
 
     message.textContent =
       "Sedang mencari hasil seleksi...";
 
+    console.log("Mencari peserta:", nama);
+
     try {
       const data = await cariDatabase(nama);
 
-      if (!data.success) {
-        message.textContent =
-          data.message || "Nama tidak ditemukan.";
+      console.log("Respons database diterima:", data);
 
-        message.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
+      if (!data || !data.success) {
+        message.textContent =
+          data?.message ||
+          "Nama tidak ditemukan. Periksa kembali penulisan nama.";
 
         return;
       }
@@ -196,15 +257,14 @@ if (form) {
       tampilkanHasil(data);
 
     } catch (error) {
-      console.error("ASTERIA Error:", error);
+      console.error("ASTERIA ERROR:", error);
 
       message.textContent =
-        "Error: " + error.message;
-
-      message.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+        "Gagal memuat hasil: " + error.message;
     }
   });
+} else {
+  console.error(
+    "ASTERIA ERROR: Form pencarian tidak ditemukan."
+  );
 }
