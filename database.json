@@ -1,12 +1,48 @@
 [
   {
-    "nama": "Peserta Contoh",
+    "nama": "Windi Puspita",
     "status": "LULUS",
     "rekomendasi": "TIDAK"
   },
   {
-    "nama": "Peserta Kedua",
-    "status": "TIDAK LULUS",
-    "rekomendasi": "YA"
+    "nama": "Erfan Rezqi",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
   }
+  {
+    "nama": "Khalila Nafasha",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
+  }
+  {
+    "nama": "Mufaz Putra",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
+  }
+  {
+    "nama": "Shofia Kamila",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
+  }
+  {
+    "nama": "Quensha Amira",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
+  }
+  {
+    "nama": "Nazwa Putri",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
+  }
+  {
+    "nama": "Eghi Prayoga",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
+  }
+  {
+    "nama": "Nadien Zaura",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
+  }
+
 ]
