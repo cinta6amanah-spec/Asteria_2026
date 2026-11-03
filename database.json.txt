@@ -1,0 +1,12 @@
+[
+  {
+    "nama": "Peserta Contoh",
+    "status": "LULUS",
+    "rekomendasi": "TIDAK"
+  },
+  {
+    "nama": "Peserta Kedua",
+    "status": "TIDAK LULUS",
+    "rekomendasi": "YA"
+  }
+]
