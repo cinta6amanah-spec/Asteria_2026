@@ -1,0 +1,402 @@
+
+/* =========================
+   DASAR WEBSITE
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #111216;
+    color: #eeeeef;
+    line-height: 1.7;
+}
+
+
+/* =========================
+   HEADER DAN LOGO
+========================= */
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 35px 20px;
+
+    border-bottom: 1px solid #45464d;
+    text-align: center;
+}
+
+.logo {
+    width: 110px;
+    height: 110px;
+
+    object-fit: contain;
+    flex-shrink: 0;
+
+    margin-bottom: 5px;
+}
+
+.header span {
+    color: #d0d0d7;
+    font-size: 11px;
+    letter-spacing: 4px;
+}
+
+.header .school-header {
+    color: #888995;
+    font-size: 9px;
+    letter-spacing: 3px;
+}
+
+
+/* =========================
+   HALAMAN UTAMA
+========================= */
+
+.hero {
+    min-height: 85vh;
+
+    padding: 80px 25px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+.school-name {
+    color: #aaaab5;
+    font-size: 11px;
+    letter-spacing: 4px;
+
+    margin-bottom: 22px;
+}
+
+.hero h1 {
+    color: #f4f4f4;
+
+    font-size: clamp(48px, 12vw, 82px);
+    letter-spacing: 8px;
+
+    line-height: 1.2;
+}
+
+.subtitle {
+    color: #c1c1ca;
+
+    margin-top: 18px;
+
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.hero-description {
+    max-width: 520px;
+
+    margin-top: 28px;
+
+    color: #c5c5ca;
+    font-size: 15px;
+}
+
+
+/* =========================
+   TOMBOL
+========================= */
+
+button {
+    margin-top: 40px;
+
+    padding: 15px 28px;
+
+    background: transparent;
+    color: #eeeeef;
+
+    border: 1px solid #c5c5ce;
+
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 2px;
+
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    background: #d7d7df;
+    color: #111216;
+}
+
+.scroll-caption {
+    margin-top: 35px;
+
+    color: #777985;
+    font-size: 9px;
+    letter-spacing: 4px;
+}
+
+
+/* =========================
+   INFORMASI SELEKSI
+========================= */
+
+.information {
+    padding: 70px 25px;
+
+    background: #191a20;
+
+    border-top: 1px solid #45464d;
+}
+
+.section-label {
+    color: #aeb0c0;
+
+    font-size: 10px;
+    letter-spacing: 4px;
+}
+
+.information h2,
+.result-section h2 {
+    color: #eeeeef;
+
+    font-size: 30px;
+    margin: 12px 0 30px;
+}
+
+.info-card {
+    position: relative;
+
+    padding: 25px 20px;
+    margin-bottom: 18px;
+
+    background: #15161b;
+
+    border: 1px solid #41424a;
+    border-left: 2px solid #aeb0c0;
+
+    transition: 0.3s ease;
+}
+
+.info-card:hover {
+    border-color: #85889b;
+    transform: translateY(-3px);
+}
+
+.card-number {
+    color: #85889b;
+
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.info-card h3 {
+    color: #eeeeef;
+
+    font-size: 19px;
+    margin: 10px 0;
+}
+
+.info-card p {
+    color: #bdbdc5;
+    font-size: 14px;
+}
+
+
+/* =========================
+   BAGIAN HASIL
+========================= */
+
+.result-section {
+    padding: 75px 25px;
+
+    background: #111216;
+
+    border-top: 1px solid #45464d;
+}
+
+.result-section > p:last-of-type {
+    color: #bdbdc5;
+    font-size: 14px;
+}
+
+.result-placeholder {
+    margin-top: 28px;
+
+    padding: 25px 20px;
+
+    background: #191a20;
+    border: 1px solid #45464d;
+
+    color: #9999a3;
+    font-size: 13px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    padding: 35px 20px;
+
+    text-align: center;
+
+    color: #9999a3;
+    font-size: 11px;
+    letter-spacing: 2px;
+
+    border-top: 1px solid #45464d;
+}
+
+footer p + p {
+    margin-top: 7px;
+}
+
+.credit {
+    color: #686a78;
+    margin-top: 15px !important;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 480px) {
+
+    .hero {
+        padding: 70px 22px;
+    }
+
+    .hero h1 {
+        letter-spacing: 5px;
+    }
+
+    .information,
+    .result-section {
+        padding: 55px 22px;
+    }
+
+    .logo {
+        width: 110px;
+        height: 110px;
+    }
+
+}
+
+/* FORM PENCARIAN */
+
+.result-description {
+    color: #bdbdc5;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 500px;
+}
+
+.search-form label {
+    color: #aaaab5;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+.search-form input {
+    width: 100%;
+    padding: 15px;
+
+    background: #191a20;
+    color: #eeeeef;
+
+    border: 1px solid #55565d;
+    outline: none;
+
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.search-form input:focus {
+    border-color: #c5c5ce;
+}
+
+.search-form button {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.search-message {
+    margin-top: 20px;
+    color: #c5c5ce;
+    font-size: 13px;
+}
+
+.result-card {
+    display: none;
+    margin-top: 25px;
+    padding: 25px;
+    border: 1px solid #777985;
+    background: #191a20;
+}
+
+/* ASTERIA - Result Card */
+
+.result-content {
+  padding: 28px 20px;
+  margin-top: 20px;
+  border: 1px solid #777;
+  border-radius: 12px;
+  text-align: center;
+  background: #17191f;
+  color: #f1f1f1;
+}
+
+.result-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #aaa;
+}
+
+.result-content h2 {
+  margin: 18px 0 10px;
+  letter-spacing: 2px;
+}
+
+.result-content h3 {
+  font-size: 24px;
+  letter-spacing: 3px;
+}
+
+.result-lulus {
+  border-color: #aeb9c9;
+}
+
+.result-tidak-lulus {
+  border-color: #777;
+}
+
+.recommendation {
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px solid #aeb9c9;
+  border-radius: 8px;
+  color: #d7dce5;
+  font-size: 13px;
+}

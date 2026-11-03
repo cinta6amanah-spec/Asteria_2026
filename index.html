@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111216">
+
+    <title>ASTERIA 2026 | MPK SMAN 1 Lembang</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <img
+            src="logo-mpk.png"
+            alt="Logo MPK SMAN 1 Lembang"
+            class="logo"
+        >
+
+        <span>MAJELIS PERWAKILAN KELAS</span>
+        <span class="school-header">SMAN 1 LEMBANG</span>
+    </header>
+
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <p class="school-name">
+                MPK SMAN 1 LEMBANG
+            </p>
+
+            <h1>ASTERIA</h1>
+
+            <p class="subtitle">
+                Seleksi Calon Anggota MPK 2026
+            </p>
+
+            <p class="hero-description">
+                Sebuah proses untuk menemukan generasi
+                perwakilan yang berintegritas, bertanggung
+                jawab, dan mampu menyuarakan aspirasi.
+            </p>
+
+            <button id="startButton">
+                LIHAT HASIL SELEKSI
+            </button>
+
+            <p class="scroll-caption">
+                SCROLL TO EXPLORE
+            </p>
+
+        </section>
+
+        <!-- INFORMASI SELEKSI -->
+        <section class="information" id="informasi">
+
+            <p class="section-label">
+                ASTERIA 2026
+            </p>
+
+            <h2>Informasi Seleksi</h2>
+
+            <div class="info-card">
+                <span class="card-number">01</span>
+
+                <h3>Tahapan Seleksi</h3>
+
+                <p>
+                    Informasi mengenai tahapan seleksi calon
+                    anggota MPK akan diumumkan melalui bagian ini.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <span class="card-number">02</span>
+
+                <h3>Pengingat</h3>
+
+                <p>
+                    Setiap peserta dinilai berdasarkan berbagai
+                    aspek selama rangkaian seleksi. Hargai proses
+                    dan hasil setiap peserta. Hindari ejekan
+                    maupun sindiran terhadap siapa pun.
+                </p>
+            </div>
+
+            <div class="info-card">
+                <span class="card-number">03</span>
+
+                <h3>Kontak Panitia</h3>
+
+                <p>
+                    Informasi kontak panitia akan dicantumkan
+                    di bagian ini.
+                </p>
+            </div>
+
+        </section>
+
+        <!-- PENGECEKAN HASIL -->
+        
+<section class="result-section" id="hasil">
+
+    <p class="section-label">PENGUMUMAN RESMI</p>
+
+    <h2>Pengecekan Hasil</h2>
+
+    <p class="result-description">
+        Masukkan nama lengkap untuk melihat hasil
+        seleksi calon anggota MPK ASTERIA 2026.
+    </p>
+
+    <form id="searchForm" class="search-form">
+
+        <label for="participantName">
+            NAMA LENGKAP
+        </label>
+
+        <input
+            type="text"
+            id="participantName"
+            placeholder="Masukkan nama lengkap"
+            autocomplete="off"
+            required
+        >
+
+        <button type="submit">
+            CARI HASIL
+        </button>
+
+    </form>
+
+    <div id="searchMessage" class="search-message"></div>
+
+    <div id="resultCard" class="result-card"></div>
+
+</section>
+
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>MPK SMAN 1 LEMBANG</p>
+        <p>ASTERIA 2026</p>
+        <p class="credit">Organized by Montarium</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
