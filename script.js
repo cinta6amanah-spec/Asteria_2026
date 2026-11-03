@@ -1,5 +1,5 @@
-
-const API_URL = "https://script.google.com/macros/s/AKfycbzIPKhx6VOdqrZ7TCO6pe7TJIQSYeuGpywBlcWe-NvsXYkatsmQOLDz3MF5G2c0vX1DGw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbybKnb5xc0Rv9TGYx8gx41eJqlBSbbFizLNiPJE61VmZjqdBsvUD3bfbWXJMnvWtobFOQ/exec";
+const vX1DGw/exec";
 
 const form = document.querySelector(".search-form");
 const nameInput = document.getElementById("participantName");
