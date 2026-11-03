@@ -1,8 +1,9 @@
 
 document.addEventListener("DOMContentLoaded", function () {
-  // ========================================
+
+  // ==========================================
   // 1. ELEMENT WEBSITE
-  // ========================================
+  // ==========================================
 
   const form = document.querySelector(".search-form");
   const nameInput = document.getElementById("participantName");
@@ -12,9 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const heroButton = document.querySelector(".hero button");
   const hasilSection = document.querySelector("#hasil");
 
-  // ========================================
+  // ==========================================
   // 2. NAVIGASI DAN SCROLL
-  // ========================================
+  // ==========================================
 
   if (heroButton && hasilSection) {
     heroButton.addEventListener("click", function () {
@@ -25,9 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ========================================
+  // ==========================================
   // 3. PENGAMAN TEKS HTML
-  // ========================================
+  // ==========================================
 
   function escapeHTML(text) {
     return String(text).replace(/[&<>"']/g, function (char) {
@@ -41,54 +42,90 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ========================================
+  // ==========================================
   // 4. MEMBACA DATABASE JSON
-  // ========================================
+  // ==========================================
 
   async function cariDatabase(nama) {
-    const response = await fetch("./database.json", {
-      cache: "no-store"
-    });
 
-    if (!response.ok) {
-      throw new Error(
-        "Database gagal dimuat. HTTP " + response.status
-      );
-    }
+    console.log("ASTERIA: Memulai pencarian database.");
 
-    const database = await response.json();
+    const controller = new AbortController();
 
-    if (!Array.isArray(database)) {
-      throw new Error("Format database tidak valid.");
-    }
+    const timeout = setTimeout(function () {
+      controller.abort();
+    }, 15000);
 
-    const peserta = database.find(function (item) {
-      return (
-        String(item.nama || "").trim().toLowerCase() ===
-        nama.trim().toLowerCase()
-      );
-    });
+    try {
 
-    if (!peserta) {
+      const response = await fetch("./database.json", {
+        method: "GET",
+        cache: "no-store",
+        signal: controller.signal
+      });
+
+      console.log("ASTERIA: HTTP", response.status);
+
+      if (!response.ok) {
+        throw new Error(
+          "Database gagal dimuat. HTTP " + response.status
+        );
+      }
+
+      const database = await response.json();
+
+      console.log("ASTERIA: Database berhasil dibaca.");
+
+      if (!Array.isArray(database)) {
+        throw new Error("Format database tidak valid.");
+      }
+
+      const peserta = database.find(function (item) {
+
+        return (
+          String(item.nama || "").trim().toLowerCase() ===
+          nama.trim().toLowerCase()
+        );
+
+      });
+
+      console.log("ASTERIA: Hasil pencarian:", peserta);
+
+      if (!peserta) {
+        return {
+          success: false,
+          message: "Nama tidak ditemukan. Periksa kembali penulisan nama."
+        };
+      }
+
       return {
-        success: false,
-        message: "Nama tidak ditemukan. Periksa kembali penulisan nama."
+        success: true,
+        nama: peserta.nama,
+        status: peserta.status,
+        rekomendasi: peserta.rekomendasi
       };
-    }
 
-    return {
-      success: true,
-      nama: peserta.nama,
-      status: peserta.status,
-      rekomendasi: peserta.rekomendasi
-    };
+    } catch (error) {
+
+      if (error.name === "AbortError") {
+        throw new Error(
+          "Waktu pencarian habis. Periksa koneksi internet."
+        );
+      }
+
+      throw error;
+
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
-  // ========================================
+  // ==========================================
   // 5. MENAMPILKAN HASIL SELEKSI
-  // ========================================
+  // ==========================================
 
   function tampilkanHasil(data) {
+
     const status = String(data.status || "")
       .trim()
       .toUpperCase();
@@ -98,24 +135,31 @@ document.addEventListener("DOMContentLoaded", function () {
     let deskripsi = "";
 
     if (status === "LULUS") {
+
       jenis = "result-lulus";
       judul = "SELAMAT!";
+
       deskripsi =
         "Kamu dinyatakan LULUS seleksi calon anggota MPK.";
 
     } else if (status === "TIDAK LULUS") {
+
       jenis = "result-tidak-lulus";
       judul = "TERIMA KASIH!";
+
       deskripsi =
         "Kamu belum dinyatakan lulus seleksi MPK. Terima kasih atas usaha, waktu, dan partisipasimu dalam proses seleksi ASTERIA 2026.";
 
     } else {
+
       message.textContent =
         "Status peserta belum valid. Hubungi panitia.";
+
       return;
     }
 
-    // Rekomendasi OSIS
+    // REKOMENDASI OSIS
+
     let rekomendasi = "";
 
     if (
@@ -123,6 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .trim()
         .toUpperCase() === "YA"
     ) {
+
       rekomendasi = `
         <div class="recommendation">
           <p><strong>REKOMENDASI OSIS</strong></p>
@@ -135,19 +180,37 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
 
-    // Kartu hasil
+    // KARTU HASIL
+
     resultCard.innerHTML = `
       <div class="result-content ${jenis}">
-        <p class="result-label">HASIL SELEKSI RESMI</p>
-        <p class="result-label">ASTERIA 2026</p>
+
+        <p class="result-label">
+          HASIL SELEKSI RESMI
+        </p>
+
+        <p class="result-label">
+          ASTERIA 2026
+        </p>
+
         <h2>${judul}</h2>
+
         <p class="participant-name">
           ${escapeHTML(data.nama)}
         </p>
+
         <h3>${escapeHTML(status)}</h3>
-        <p class="result-description">${deskripsi}</p>
+
+        <p class="result-description">
+          ${deskripsi}
+        </p>
+
         ${rekomendasi}
-        <p class="result-footer">MPK SMAN 1 LEMBANG</p>
+
+        <p class="result-footer">
+          MPK SMAN 1 LEMBANG
+        </p>
+
       </div>
     `;
 
@@ -159,12 +222,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ========================================
+  // ==========================================
   // 6. PROSES PENCARIAN PESERTA
-  // ========================================
+  // ==========================================
 
   if (form && nameInput && message && resultCard) {
+
     form.addEventListener("submit", async function (event) {
+
       event.preventDefault();
 
       const nama = nameInput.value.trim();
@@ -173,8 +238,10 @@ document.addEventListener("DOMContentLoaded", function () {
       message.textContent = "";
 
       if (!nama) {
+
         message.textContent =
           "Masukkan nama lengkap terlebih dahulu.";
+
         return;
       }
 
@@ -182,22 +249,41 @@ document.addEventListener("DOMContentLoaded", function () {
         "Sedang mencari hasil seleksi...";
 
       try {
+
         const data = await cariDatabase(nama);
 
         if (!data.success) {
+
           message.textContent =
             data.message || "Nama tidak ditemukan.";
+
           return;
         }
 
         tampilkanHasil(data);
 
       } catch (error) {
+
         console.error("ASTERIA ERROR:", error);
 
         message.textContent =
           "Gagal memuat hasil: " + error.message;
       }
+
     });
+
+  } else {
+
+    console.error(
+      "ASTERIA ERROR: Elemen HTML tidak ditemukan.",
+      {
+        form: !!form,
+        nameInput: !!nameInput,
+        message: !!message,
+        resultCard: !!resultCard
+      }
+    );
+
   }
+
 });
