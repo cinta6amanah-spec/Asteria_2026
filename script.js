@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
       judul = "SELAMAT!";
 
       deskripsi =
-        "Kamu dinyatakan LULUS seleksi calon anggota MPK.";
+        "Kamu dinyatakan LULUS seleksi calon anggota MPK. Silahkan hubungi kakak pembimbingmu.";
 
     } else if (status === "TIDAK LULUS") {
 
@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
       judul = "TERIMA KASIH!";
 
       deskripsi =
-        "Kamu belum dinyatakan lulus seleksi MPK. Terima kasih atas usaha, waktu, dan partisipasimu dalam proses seleksi ASTERIA 2026.";
+        "Kamu belum dinyatakan lulus seleksi MPK. Masih banyak potensi diri yang belum kamu keluarkan, carilah! Terima kasih atas usaha, waktu, dan partisipasimu dalam proses seleksi ASTERIA 2026.";
 
     } else {
 
