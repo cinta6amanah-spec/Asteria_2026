@@ -48,8 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function cariDatabase(nama) {
 
-    console.log("ASTERIA: Memulai pencarian database.");
-
     const controller = new AbortController();
 
     const timeout = setTimeout(function () {
@@ -58,13 +56,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
 
-      const response = await fetch("./database.json", {
+      const databaseURL = new URL(
+        "database.json",
+        document.baseURI
+      );
+
+      const response = await fetch(databaseURL, {
         method: "GET",
         cache: "no-store",
         signal: controller.signal
       });
-
-      console.log("ASTERIA: HTTP", response.status);
 
       if (!response.ok) {
         throw new Error(
@@ -73,8 +74,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const database = await response.json();
-
-      console.log("ASTERIA: Database berhasil dibaca.");
 
       if (!Array.isArray(database)) {
         throw new Error("Format database tidak valid.");
@@ -88,8 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
 
       });
-
-      console.log("ASTERIA: Hasil pencarian:", peserta);
 
       if (!peserta) {
         return {
@@ -180,18 +177,14 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     }
 
-    // KARTU HASIL
+    // TAMPILKAN KARTU HASIL
 
     resultCard.innerHTML = `
       <div class="result-content ${jenis}">
 
-        <p class="result-label">
-          HASIL SELEKSI RESMI
-        </p>
+        <p class="result-label">HASIL SELEKSI RESMI</p>
 
-        <p class="result-label">
-          ASTERIA 2026
-        </p>
+        <p class="result-label">ASTERIA 2026</p>
 
         <h2>${judul}</h2>
 
@@ -214,6 +207,8 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     `;
 
+    resultCard.style.display = "block";
+
     message.textContent = "";
 
     resultCard.scrollIntoView({
@@ -226,64 +221,62 @@ document.addEventListener("DOMContentLoaded", function () {
   // 6. PROSES PENCARIAN PESERTA
   // ==========================================
 
-  if (form && nameInput && message && resultCard) {
+  if (!form || !nameInput || !message || !resultCard) {
 
-    form.addEventListener("submit", async function (event) {
+    console.error("ASTERIA: Elemen HTML tidak ditemukan.", {
+      form: !!form,
+      nameInput: !!nameInput,
+      message: !!message,
+      resultCard: !!resultCard
+    });
 
-      event.preventDefault();
+    return;
+  }
 
-      const nama = nameInput.value.trim();
+  form.addEventListener("submit", async function (event) {
 
-      resultCard.innerHTML = "";
-      message.textContent = "";
+    event.preventDefault();
 
-      if (!nama) {
+    const nama = nameInput.value.trim();
+
+    resultCard.innerHTML = "";
+    resultCard.style.display = "none";
+
+    message.textContent = "";
+
+    if (!nama) {
+
+      message.textContent =
+        "Masukkan nama lengkap terlebih dahulu.";
+
+      return;
+    }
+
+    message.textContent =
+      "Sedang mencari hasil seleksi...";
+
+    try {
+
+      const data = await cariDatabase(nama);
+
+      if (!data.success) {
 
         message.textContent =
-          "Masukkan nama lengkap terlebih dahulu.";
+          data.message || "Nama tidak ditemukan.";
 
         return;
       }
 
+      tampilkanHasil(data);
+
+    } catch (error) {
+
+      console.error("ASTERIA ERROR:", error);
+
       message.textContent =
-        "Sedang mencari hasil seleksi...";
+        "Gagal memuat hasil: " + error.message;
+    }
 
-      try {
-
-        const data = await cariDatabase(nama);
-
-        if (!data.success) {
-
-          message.textContent =
-            data.message || "Nama tidak ditemukan.";
-
-          return;
-        }
-
-        tampilkanHasil(data);
-
-      } catch (error) {
-
-        console.error("ASTERIA ERROR:", error);
-
-        message.textContent =
-          "Gagal memuat hasil: " + error.message;
-      }
-
-    });
-
-  } else {
-
-    console.error(
-      "ASTERIA ERROR: Elemen HTML tidak ditemukan.",
-      {
-        form: !!form,
-        nameInput: !!nameInput,
-        message: !!message,
-        resultCard: !!resultCard
-      }
-    );
-
-  }
+  });
 
 });
